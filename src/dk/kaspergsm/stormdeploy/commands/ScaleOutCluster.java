@@ -122,9 +122,15 @@ public class ScaleOutCluster {
 		try {
 			
 			// Create initScript
+			String installDir = System.getProperty("install.dir");
 			ArrayList<Statement> initScript = new ArrayList<Statement>();
-			initScript.add(exec("echo WORKER > ~/daemons"));
-			initScript.add(exec("echo \"" + instanceType + "\" > ~/.instance-type"));
+			initScript.add(exec("mkdir -p "+ installDir));
+			if (!"~/".equals(installDir)) {
+				initScript.add(exec("chown " + config.getImageUsername() + " " + installDir));
+			}
+			initScript.add(exec("echo WORKER > " + installDir + "daemons"));
+			initScript.add(exec("echo WORKER > " + installDir + "daemons"));
+			initScript.add(exec("echo \"" + instanceType + "\" > "+ installDir +".instance-type"));
 			initScript.addAll(commands);
 			
 			log.info("Starting " + numInstances + " instance(s) of type " + instanceType);

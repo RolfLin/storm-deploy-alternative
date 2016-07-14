@@ -35,7 +35,8 @@ public class Configuration {
 			"memory-monitor",
 			"remote-exec-preconfig",
 			"remote-exec-postconfig",
-			"ssh-key-name"));
+			"ssh-key-name",
+			"install-dir"));
 	
 	public static Configuration fromYamlFile(File f, String clustername) {
 		return new Configuration(Tools.readYamlConf(f), clustername);
@@ -181,6 +182,8 @@ public class Configuration {
 			return "https://s3-eu-west-1.amazonaws.com/storm-releases/apache-storm-0.9.5.tar.gz";
 		} else if (version.equals("0.10.0")) {
 			return "https://s3-eu-west-1.amazonaws.com/storm-releases/apache-storm-0.10.0.tar.gz";
+		} else if (version.equals("1.0.1")) {
+			return "https://s3-eu-west-1.amazonaws.com/storm-releases/apache-storm-1.0.1.tar.gz";
 		} else {
 			log.info("Storm version " + version + " not currently supported!");
 		}
@@ -199,6 +202,24 @@ public class Configuration {
 
 		return sshKeyName;
 	}
+
+	/**
+	 * Get install directory
+	 */
+	public String getInstallDir() {
+		String installDir = getRawConfigValue("install-dir");
+
+		// If no install-dir is specified, assume home directory
+		if (installDir == null) {
+			installDir = "~/";
+		}
+
+		if (!installDir.endsWith(File.separator)) {
+			installDir += File.separator;
+		}
+		return installDir;
+	}
+
 
 	private String getRawConfigValue(String k) {
 		for (int i = 0; i < _conf.size(); i++) {
