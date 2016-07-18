@@ -7,3 +7,5 @@ conf/credential.yaml
 dependency-reduced-pom.xml
 memory-monitor.log
 /bin/
+.idea
+*.iml

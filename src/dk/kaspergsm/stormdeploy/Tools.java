@@ -253,7 +253,7 @@ public class Tools {
 	}
 	
 	public static Statement execOnUI(String cmd) {
-		return exec("case $(head -n 1 ~/daemons) in *UI*) " + cmd + " ;; esac");
+		return exec("case $(head -n 1 " + System.getProperty("install.dir") + "daemons) in *UI*) " + cmd + " ;; esac");
 	}
 	
 	public static String getInstanceIp(NodeMetadata node) {

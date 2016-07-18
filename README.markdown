@@ -30,6 +30,7 @@ mycluster:
     - remote-exec-preconfig {cd ~, echo hey > hey.txt}
     - remote-exec-postconfig {}
     - ssh-key-name "mySSHKeyName"           # Optional. defaults to "id_rsa"
+    - install-dir "/mnt"
 ```
 + MASTER is the Storm Nimbus daemon
 + WORKER is the Storm Supervisor daemon

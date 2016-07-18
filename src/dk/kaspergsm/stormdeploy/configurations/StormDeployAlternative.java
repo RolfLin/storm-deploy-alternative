@@ -15,8 +15,15 @@ import dk.kaspergsm.stormdeploy.Tools;
  */
 public class StormDeployAlternative {
 
-	public static List<Statement> download() {
-		return Tools.download("~", "https://s3-eu-west-1.amazonaws.com/storm-deploy-alternative/sda.tar.gz", true, true);
+	public static List<Statement> download(String username) {
+		String installDir = System.getProperty("install.dir");
+		List<Statement> st = new ArrayList<Statement>();
+		st.add(exec("mkdir -p "+ installDir));
+		if (!"~/".equals(installDir)) {
+			st.add(exec("chown " + username + " " + installDir));
+		}
+		st.addAll(Tools.download(installDir, "https://s3-eu-west-1.amazonaws.com/storm-deploy-alternative/sda.tar.gz", true, true));
+		return st;
 	}
 	
 	/**
@@ -25,15 +32,16 @@ public class StormDeployAlternative {
 	 */
 	public static List<Statement> runMemoryMonitor(String username) {
 		List<Statement> st = new ArrayList<Statement>();
-		st.add(exec("su -c 'java -cp \"/home/"+username+"/sda/storm-deploy-alternative.jar:$( find `ls -d /usr/lib/jvm/* | sort -k1 -r` -name tools.jar | head -1 )\" dk.kaspergsm.stormdeploy.image.MemoryMonitor &' - " + username));
+		st.add(exec("su -c 'java -cp \"" + System.getProperty("install.dir") + "sda/storm-deploy-alternative.jar:$( find `ls -d /usr/lib/jvm/* | sort -k1 -r` -name tools.jar | head -1 )\" dk.kaspergsm.stormdeploy.image.MemoryMonitor &' - " + username));
 		return st;
 	}
 	
-	public static List<Statement> writeConfigurationFiles(String localConfigurationFile, String localCredentialFile) {	
+	public static List<Statement> writeConfigurationFiles(String localConfigurationFile, String localCredentialFile) {
+		String installDir = System.getProperty("install.dir");
 		List<Statement> st = new ArrayList<Statement>();
-		st.add(exec("mkdir ~/sda/conf"));
-		st.addAll(Tools.echoFile(localConfigurationFile, "~/sda/conf/configuration.yaml"));
-		st.addAll(Tools.echoFile(localCredentialFile, "~/sda/conf/credential.yaml"));
+		st.add(exec("mkdir " + installDir + "sda/conf"));
+		st.addAll(Tools.echoFile(localConfigurationFile, installDir + "sda/conf/configuration.yaml"));
+		st.addAll(Tools.echoFile(localCredentialFile, installDir + "sda/conf/credential.yaml"));
 		return st;
 	}
 	

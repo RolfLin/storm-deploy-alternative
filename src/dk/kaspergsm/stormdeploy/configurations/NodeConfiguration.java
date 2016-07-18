@@ -45,7 +45,7 @@ public class NodeConfiguration {
 		commands.addAll(ZeroMQ.configure());
 		
 		// Download and configure storm-deploy-alternative (before anything with supervision is started)
-		commands.addAll(StormDeployAlternative.download());
+		commands.addAll(StormDeployAlternative.download(config.getImageUsername()));
 		commands.addAll(StormDeployAlternative.writeConfigurationFiles(Tools.getWorkDir() + "conf" + File.separator + "configuration.yaml", Tools.getWorkDir() + "conf" + File.separator + "credential.yaml"));
 		commands.addAll(StormDeployAlternative.writeLocalSSHKeys(config.getSSHKeyName()));
 		

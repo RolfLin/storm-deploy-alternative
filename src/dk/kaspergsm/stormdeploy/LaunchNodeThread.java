@@ -26,7 +26,7 @@ import static org.jclouds.scriptbuilder.domain.Statements.exec;
  */
 public class LaunchNodeThread extends Thread {
 	private static Logger log = LoggerFactory.getLogger(LaunchNodeThread.class);
-	private String _instanceType, _clustername, _region, _image, _username, _sshkeyname, _subnetId, _securityGroupId;;
+	private String _instanceType, _clustername, _region, _image, _username, _sshkeyname, _subnetId, _securityGroupId, _installDir;;
 	private Set<NodeMetadata> _newNodes = null;
 	private List<Statement> _initScript;
 	private ComputeService _compute;
@@ -36,12 +36,10 @@ public class LaunchNodeThread extends Thread {
 	/**
 	 * @param compute
 	 *            ComputeService from JClouds
+	 * @param config
+	 *            User configuration from configuration.yaml
 	 * @param instanceType
 	 *            Supported instanceType (e.g. m1.medium on aws-ec2)
-	 * @param image
-	 *            Image to deploy
-	 * @param region
-	 *            Region to deploy into (image must be in this region)
 	 * @param clustername
 	 *            Name of cluster to deploy
 	 * @param nodeids
@@ -63,11 +61,16 @@ public class LaunchNodeThread extends Thread {
 		_compute = compute;
 		_nodeids = nodeids;
 		_sshkeyname = config.getSSHKeyName();
+		_installDir = config.getInstallDir();
 
 		// Create initScript
 		_initScript = new ArrayList<Statement>();
-		_initScript.add(exec("echo \"" + daemons.toString() + "\" > ~/daemons"));
-		_initScript.add(exec("echo \"" + instanceType + "\" > ~/.instance-type"));
+		_initScript.add(exec("mkdir -p " + _installDir));
+		if (!"~/".equals(_installDir)) {
+			_initScript.add(exec("chown " + _username + " " + _installDir));
+		}
+		_initScript.add(exec("echo \"" + daemons.toString() + "\" > " + _installDir + "daemons"));
+		_initScript.add(exec("echo \"" + instanceType + "\" > " + _installDir + ".instance-type"));
 		if (zkMyId != null)
 			_initScript.addAll(Zookeeper.writeZKMyIds(_username, zkMyId));
 

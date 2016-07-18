@@ -36,6 +36,8 @@ public class StormDeployAlternative {
 		String operation = args[0];
 		String clustername = args[1].toLowerCase();
 		Configuration config = Configuration.fromYamlFile(new File(Tools.getWorkDir() + "conf" + File.separator + "configuration.yaml"), clustername);
+		// Set install dir here so that we don’t have to keep passing around Configuration.
+		System.setProperty("install.dir", config.getInstallDir());
 		Credential credentials = new Credential(new File(Tools.getWorkDir() + "conf" + File.separator + "credential.yaml"));
 
 
