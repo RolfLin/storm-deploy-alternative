@@ -2,6 +2,9 @@ Fast tool to deploy [Storm](https://github.com/apache/incubator-storm) on [Amazo
 
 _Please don't hesitate to contact me. Your feedback will help to further improve this tool._
 
+## Motivation
+This tool is built as an alternative to storm-deploy, with significant more functionality. I built it, because I needed more advanced features than provided by storm-deploy for my PhD studies. The tool is written in 100% Java, making it easy to extend and reuse. This project could also be a good starting point for building deploy software for other tools, based on JClouds.
+
 ## Features
 + Runs Storm and Zookeeper daemons under supervision (automatically restarted in case of failure)
 + Only fetch and compile what is needed (can deploy on prepared images in a few minutes)
@@ -10,7 +13,7 @@ _Please don't hesitate to contact me. Your feedback will help to further improve
 + Automatically sets up [Ganglia](http://ganglia.sourceforge.net/), making it easy to monitor performance
 + Automatically sets up [Amazon EC2 AMI Tools](http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ami-tools.html) on new nodes
 + Supports Zookeeper versions: _3.4.5_ & _3.4.6_
-+ Supports Storm versions: _0.8.2_ & _0.9.0.1_ & _0.9.2_ & _0.9.3_ & _0.9.4_ & _0.9.5_ & _0.10.0_ 
++ Supports Storm versions: _0.8.2_ & _0.9.0.1_ & _0.9.2_ & _0.9.3_ & _0.9.4_ & _0.9.5_ & _0.10.0_ & _1.0.1_
 
 ## Configuration
 This tool, requires two configurationfiles: `conf/credential.yaml` and `conf/configuration.yaml`. Put your credentials into the file `conf/credential.yaml`. It's required that you have generated an SSH key-pair in `~/.ssh` with an empty pass phrase.
