@@ -66,7 +66,7 @@ public class NodeConfiguration {
 		commands.addAll(Zookeeper.configure(zookeeperHostnames));
 		
 		// Configure Storm (update configurationfiles)
-		commands.addAll(Storm.configure(nimbusHostname, zookeeperHostnames, drpcHostnames, config.getImageUsername()));
+		commands.addAll(Storm.configure(nimbusHostname, zookeeperHostnames, drpcHostnames, config.getImageUsername(), config.getStormVersion()));
 		
 		// Configure Ganglia
 		commands.addAll(Ganglia.configure(clustername, uiHostname));
@@ -80,11 +80,11 @@ public class NodeConfiguration {
 		 * Start daemons (only on correct nodes, and under supervision)
 		 */
 		commands.addAll(Zookeeper.startDaemonSupervision(config.getImageUsername()));
-		commands.addAll(Storm.startNimbusDaemonSupervision(config.getImageUsername()));
-		commands.addAll(Storm.startSupervisorDaemonSupervision(config.getImageUsername()));
-		commands.addAll(Storm.startUIDaemonSupervision(config.getImageUsername()));
-		commands.addAll(Storm.startDRPCDaemonSupervision(config.getImageUsername()));
-		commands.addAll(Storm.startLogViewerDaemonSupervision(config.getImageUsername()));
+		commands.addAll(Storm.startNimbusDaemonSupervision(config.getImageUsername(), config.getStormVersion()));
+		commands.addAll(Storm.startSupervisorDaemonSupervision(config.getImageUsername(), config.getStormVersion()));
+		commands.addAll(Storm.startUIDaemonSupervision(config.getImageUsername(), config.getStormVersion()));
+		commands.addAll(Storm.startDRPCDaemonSupervision(config.getImageUsername(), config.getStormVersion()));
+		commands.addAll(Storm.startLogViewerDaemonSupervision(config.getImageUsername(), config.getStormVersion()));
 		commands.addAll(Ganglia.start());
 		
 		/**

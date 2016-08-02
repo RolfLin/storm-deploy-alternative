@@ -189,7 +189,11 @@ public class Configuration {
 		}
 		return null;
 	}
-	
+
+	public String getStormVersion(){
+		return getRawConfigValue("storm-version");
+	}
+
 	/**
 	 * Get the ssh key pair name
 	 */
