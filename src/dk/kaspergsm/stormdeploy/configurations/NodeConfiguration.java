@@ -66,7 +66,7 @@ public class NodeConfiguration {
 		commands.addAll(Zookeeper.configure(zookeeperHostnames));
 		
 		// Configure Storm (update configurationfiles)
-		commands.addAll(Storm.configure(nimbusHostname, zookeeperHostnames, drpcHostnames, config.getImageUsername()));
+		commands.addAll(Storm.configure(nimbusHostname, zookeeperHostnames, drpcHostnames, config.getImageUsername(), config.getStormVersion()));
 		
 		// Configure Ganglia
 		commands.addAll(Ganglia.configure(clustername, uiHostname));

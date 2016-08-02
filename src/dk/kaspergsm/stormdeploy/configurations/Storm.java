@@ -29,16 +29,19 @@ public class Storm {
 	/**
 	 * Write storm/conf/storm.yaml (basic settings only)
 	 */
-	public static List<Statement> configure(String hostname, List<String> zkNodesHostname, List<String> drpcHostname, String userName) {
+	public static List<Statement> configure(String hostname, List<String> zkNodesHostname, List<String> drpcHostname, String userName, String stormVersion) {
 		List<Statement> st = new ArrayList<Statement>();
 		String installDir = System.getProperty("install.dir");
 		st.add(exec("cd " + installDir + "storm/conf/"));
 		st.add(exec("touch storm.yaml"));
 		
 		// Add nimbus.host
-		//FIXME: This differs between storm versions! Need to check here
-		st.add(exec("echo nimbus.seeds: [\"" + hostname + "\"]git  >> storm.yaml"));
-		
+		if (stormVersion != null && stormVersion.startsWith("1")) {
+			st.add(exec("echo nimbus.seeds: [\"" + hostname + "\"]  >> storm.yaml"));
+		} else {
+			st.add(exec("echo nimbus.host: \"" + hostname + "\"  >> storm.yaml"));
+		}
+
 		// Add storm.zookeeper.servers
 		st.add(exec("echo storm.zookeeper.servers: >> storm.yaml"));
 		for (int i = 1; i <= zkNodesHostname.size(); i++)
