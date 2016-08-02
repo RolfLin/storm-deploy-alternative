@@ -36,7 +36,8 @@ public class Storm {
 		st.add(exec("touch storm.yaml"));
 		
 		// Add nimbus.host
-		st.add(exec("echo nimbus.host: \"" + hostname + "\" >> storm.yaml"));
+		//FIXME: This differs between storm versions! Need to check here
+		st.add(exec("echo nimbus.seeds: [\"" + hostname + "\"]git  >> storm.yaml"));
 		
 		// Add storm.zookeeper.servers
 		st.add(exec("echo storm.zookeeper.servers: >> storm.yaml"));
@@ -71,7 +72,7 @@ public class Storm {
 		String installDir = System.getProperty("install.dir");
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
-		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *MASTER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor backtype.storm.daemon.nimbus " + installDir + "storm/bin/storm nimbus ;; esac &' - " + username));
+		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *MASTER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor org.apache.storm.daemon.nimbus " + installDir + "storm/bin/storm nimbus ;; esac &' - " + username));
 		return st;
 	}
 	
@@ -82,7 +83,7 @@ public class Storm {
 		String installDir = System.getProperty("install.dir");
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
-		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *WORKER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor backtype.storm.daemon.supervisor " + installDir + "storm/bin/storm supervisor ;; esac &' - " + username));
+		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *WORKER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor org.apache.storm.daemon.supervisor " + installDir + "storm/bin/storm supervisor ;; esac &' - " + username));
 		return st;
 	}
 	
@@ -93,7 +94,7 @@ public class Storm {
 		String installDir = System.getProperty("install.dir");
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
-		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *UI*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor backtype.storm.ui.core " + installDir + "storm/bin/storm ui ;; esac &' - " + username));
+		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *UI*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor org.apache.storm.ui.core " + installDir + "storm/bin/storm ui ;; esac &' - " + username));
 		return st;
 	}
 	
@@ -104,7 +105,7 @@ public class Storm {
 		String installDir = System.getProperty("install.dir");
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
-		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *DRPC*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor backtype.storm.daemon.drpc " + installDir + "storm/bin/storm drpc ;; esac &' - " + username));
+		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *DRPC*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor org.apache.storm.daemon.drpc " + installDir + "storm/bin/storm drpc ;; esac &' - " + username));
 		return st;
 	}
 	
@@ -115,7 +116,7 @@ public class Storm {
 		String installDir = System.getProperty("install.dir");
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
-		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *LOGVIEWER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor backtype.storm.daemon.logviewer " + installDir + "storm/bin/storm logviewer ;; esac &' - " + username));
+		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *LOGVIEWER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor org.apache.storm.daemon.logviewer " + installDir + "storm/bin/storm logviewer ;; esac &' - " + username));
 		return st;
 	}
 	
