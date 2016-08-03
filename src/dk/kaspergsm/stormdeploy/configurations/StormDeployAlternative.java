@@ -5,6 +5,8 @@ import static org.jclouds.scriptbuilder.domain.Statements.exec;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.scriptbuilder.domain.Statement;
 import dk.kaspergsm.stormdeploy.Tools;
 
@@ -15,8 +17,7 @@ import dk.kaspergsm.stormdeploy.Tools;
  */
 public class StormDeployAlternative {
 
-	public static List<Statement> download(String username) {
-		String installDir = System.getProperty("install.dir");
+	public static List<Statement> download(String username, String installDir) {
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(exec("mkdir -p "+ installDir));
 		if (!"~/".equals(installDir)) {
@@ -32,12 +33,12 @@ public class StormDeployAlternative {
 	 */
 	public static List<Statement> runMemoryMonitor(String username) {
 		List<Statement> st = new ArrayList<Statement>();
-		st.add(exec("su -c 'java -cp \"" + System.getProperty("install.dir") + "sda/storm-deploy-alternative.jar:$( find `ls -d /usr/lib/jvm/* | sort -k1 -r` -name tools.jar | head -1 )\" dk.kaspergsm.stormdeploy.image.MemoryMonitor &' - " + username));
+		st.add(exec("su -c 'java -cp \"" + ConfigurationFactory.getConfig().getInstallDir() + "sda/storm-deploy-alternative.jar:$( find `ls -d /usr/lib/jvm/* | sort -k1 -r` -name tools.jar | head -1 )\" dk.kaspergsm.stormdeploy.image.MemoryMonitor &' - " + username));
 		return st;
 	}
 	
 	public static List<Statement> writeConfigurationFiles(String localConfigurationFile, String localCredentialFile) {
-		String installDir = System.getProperty("install.dir");
+		String installDir = ConfigurationFactory.getConfig().getInstallDir();
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(exec("mkdir " + installDir + "sda/conf"));
 		st.addAll(Tools.echoFile(localConfigurationFile, installDir + "sda/conf/configuration.yaml"));

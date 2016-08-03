@@ -45,15 +45,15 @@ public class NodeConfiguration {
 		commands.addAll(ZeroMQ.configure());
 		
 		// Download and configure storm-deploy-alternative (before anything with supervision is started)
-		commands.addAll(StormDeployAlternative.download(config.getImageUsername()));
+		commands.addAll(StormDeployAlternative.download(config.getImageUsername(), config.getInstallDir()));
 		commands.addAll(StormDeployAlternative.writeConfigurationFiles(Tools.getWorkDir() + "conf" + File.separator + "configuration.yaml", Tools.getWorkDir() + "conf" + File.separator + "credential.yaml"));
 		commands.addAll(StormDeployAlternative.writeLocalSSHKeys(config.getSSHKeyName()));
 		
 		// Download Storm
-		commands.addAll(Storm.download(config.getStormRemoteLocation()));
+		commands.addAll(Storm.download(config.getStormRemoteLocation(), config.getInstallDir()));
 		
 		// Download Zookeeper
-		commands.addAll(Zookeeper.download(config.getZKLocation()));
+		commands.addAll(Zookeeper.download(config.getInstallDir(), config.getZKLocation()));
 		
 		// Download Ganglia
 		commands.addAll(Ganglia.install());
@@ -63,10 +63,10 @@ public class NodeConfiguration {
 			commands.addAll(Tools.runCustomCommands(config.getRemoteExecPreConfig()));
 		
 		// Configure Zookeeper (update configurationfiles)
-		commands.addAll(Zookeeper.configure(zookeeperHostnames));
+		commands.addAll(Zookeeper.configure(zookeeperHostnames, config.getImageUsername(), config.getInstallDir(), config.getZkDataDir(), config.getZkRetainSnapshots(), config.getZkPurgeInterval()));
 		
 		// Configure Storm (update configurationfiles)
-		commands.addAll(Storm.configure(nimbusHostname, zookeeperHostnames, drpcHostnames, config.getImageUsername(), config.getStormVersion()));
+		commands.addAll(Storm.configure(nimbusHostname, config.getInstallDir(), zookeeperHostnames, drpcHostnames, config.getImageUsername(), config.getStormVersion()));
 		
 		// Configure Ganglia
 		commands.addAll(Ganglia.configure(clustername, uiHostname));

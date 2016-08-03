@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.Constants;
 import org.jclouds.ContextBuilder;
 import org.jclouds.apis.ApiMetadata;
@@ -253,7 +255,7 @@ public class Tools {
 	}
 	
 	public static Statement execOnUI(String cmd) {
-		return exec("case $(head -n 1 " + System.getProperty("install.dir") + "daemons) in *UI*) " + cmd + " ;; esac");
+		return exec("case $(head -n 1 " + ConfigurationFactory.getConfig().getInstallDir() + "daemons) in *UI*) " + cmd + " ;; esac");
 	}
 	
 	public static String getInstanceIp(NodeMetadata node) {

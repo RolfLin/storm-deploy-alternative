@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dk.kaspergsm.stormdeploy.userprovided.Configuration;
+import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.scriptbuilder.domain.Statement;
 
 import dk.kaspergsm.stormdeploy.Tools;
@@ -21,17 +22,16 @@ import dk.kaspergsm.stormdeploy.Tools;
  */
 public class Storm {
 
-	public static List<Statement> download(String stormRemoteLocation) {
+	public static List<Statement> download(String stormRemoteLocation, String installDir) {
 
-        return Tools.download(System.getProperty("install.dir"), stormRemoteLocation, true, true, "storm");
+        return Tools.download(installDir, stormRemoteLocation, true, true, "storm");
 	}
 	
 	/**
 	 * Write storm/conf/storm.yaml (basic settings only)
 	 */
-	public static List<Statement> configure(String hostname, List<String> zkNodesHostname, List<String> drpcHostname, String userName, String stormVersion) {
+	public static List<Statement> configure(String hostname, String installDir, List<String> zkNodesHostname, List<String> drpcHostname, String userName, String stormVersion) {
 		List<Statement> st = new ArrayList<Statement>();
-		String installDir = System.getProperty("install.dir");
 		st.add(exec("cd " + installDir + "storm/conf/"));
 		st.add(exec("touch storm.yaml"));
 		
@@ -72,7 +72,7 @@ public class Storm {
 	 * Uses Monitor to restart daemon, if it stops
 	 */
 	public static List<Statement> startNimbusDaemonSupervision(String username, String stormVersion) {
-		String installDir = System.getProperty("install.dir");
+		String installDir = ConfigurationFactory.getConfig().getInstallDir();
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
 		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *MASTER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor "+ getStormPackageForVersion(stormVersion) +".storm.daemon.nimbus " + installDir + "storm/bin/storm nimbus ;; esac &' - " + username));
@@ -83,7 +83,7 @@ public class Storm {
 	 * Uses Monitor to restart daemon, if it stops
 	 */
 	public static List<Statement> startSupervisorDaemonSupervision(String username, String stormVersion) {
-		String installDir = System.getProperty("install.dir");
+		String installDir = ConfigurationFactory.getConfig().getInstallDir();
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
 		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *WORKER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor "+ getStormPackageForVersion(stormVersion) +".storm.daemon.supervisor " + installDir + "storm/bin/storm supervisor ;; esac &' - " + username));
@@ -94,7 +94,7 @@ public class Storm {
 	 * Uses Monitor to restart daemon, if it stops
 	 */
 	public static List<Statement> startUIDaemonSupervision(String username, String stormVersion) {
-		String installDir = System.getProperty("install.dir");
+		String installDir = ConfigurationFactory.getConfig().getInstallDir();
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
 		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *UI*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor "+ getStormPackageForVersion(stormVersion) +".storm.ui.core " + installDir + "storm/bin/storm ui ;; esac &' - " + username));
@@ -105,7 +105,7 @@ public class Storm {
 	 * Uses Monitor to restart daemon, if it stops
 	 */
 	public static List<Statement> startDRPCDaemonSupervision(String username, String stormVersion) {
-		String installDir = System.getProperty("install.dir");
+		String installDir = ConfigurationFactory.getConfig().getInstallDir();
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
 		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *DRPC*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor "+ getStormPackageForVersion(stormVersion) +".storm.daemon.drpc " + installDir + "storm/bin/storm drpc ;; esac &' - " + username));
@@ -116,7 +116,7 @@ public class Storm {
      * Uses Monitor to restart daemon, if it stops
      */
 	public static List<Statement> startLogViewerDaemonSupervision(String username, String stormVersion) {
-		String installDir = System.getProperty("install.dir");
+		String installDir = ConfigurationFactory.getConfig().getInstallDir();
 		List<Statement> st = new ArrayList<Statement>();
 		st.add(goToInstallDir());
 		st.add(exec("su -c 'case $(head -n 1 " + installDir + "daemons) in *LOGVIEWER*) java -cp \"" + installDir + "sda/storm-deploy-alternative.jar\" dk.kaspergsm.stormdeploy.image.ProcessMonitor "+ getStormPackageForVersion(stormVersion) +".storm.daemon.logviewer " + installDir + "storm/bin/storm logviewer ;; esac &' - " + username));
@@ -165,7 +165,7 @@ public class Storm {
 	}
 
 	private static Statement goToInstallDir(){
-		return exec("cd " + System.getProperty("install.dir"));
+		return exec("cd " + ConfigurationFactory.getConfig().getInstallDir());
 	}
 
 	private static String getStormPackageForVersion(String stormVersion){

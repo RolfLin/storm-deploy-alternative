@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.NodeMetadata;
@@ -122,7 +124,7 @@ public class ScaleOutCluster {
 		try {
 			
 			// Create initScript
-			String installDir = System.getProperty("install.dir");
+			String installDir = config.getInstallDir();
 			ArrayList<Statement> initScript = new ArrayList<Statement>();
 			initScript.add(exec("mkdir -p "+ installDir));
 			if (!"~/".equals(installDir)) {

@@ -3,6 +3,8 @@ package dk.kaspergsm.stormdeploy.configurations;
 import static org.jclouds.scriptbuilder.domain.Statements.exec;
 import java.util.ArrayList;
 import java.util.List;
+
+import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.scriptbuilder.domain.Statement;
 import dk.kaspergsm.stormdeploy.Tools;
 
@@ -20,7 +22,7 @@ public class ZeroMQ {
 
 	public static List<Statement> download() {
 		List<Statement> st = new ArrayList<Statement>();
-		st.add(exec(Tools.conditionalExec(_condZmq, "cd " + System.getProperty("install.dir"))));
+		st.add(exec(Tools.conditionalExec(_condZmq, "cd " + ConfigurationFactory.getConfig().getInstallDir())));
 		st.add(exec(Tools.conditionalExec(_condZmq, "wget http://download.zeromq.org/zeromq-2.1.7.tar.gz")));
 		st.add(exec(Tools.conditionalExec(_condZmq, "tar -zxf zeromq-2.1.7.tar.gz")));
 		st.add(exec(Tools.conditionalExec(_condZmq, "rm zeromq-2.1.7.tar.gz")));

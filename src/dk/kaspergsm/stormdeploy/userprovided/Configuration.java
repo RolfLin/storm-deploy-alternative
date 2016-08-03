@@ -36,7 +36,10 @@ public class Configuration {
 			"remote-exec-preconfig",
 			"remote-exec-postconfig",
 			"ssh-key-name",
-			"install-dir"));
+			"install-dir",
+			"zk-data-dir",
+			"zk-retain-snapshots",
+			"zk-purge-interval"));
 	
 	public static Configuration fromYamlFile(File f, String clustername) {
 		return new Configuration(Tools.readYamlConf(f), clustername);
@@ -222,6 +225,37 @@ public class Configuration {
 			installDir += File.separator;
 		}
 		return installDir;
+	}
+
+
+	/**
+	 * Get zookeeper data directory
+	 */
+	public String getZkDataDir() {
+		String zkDataDir = getRawConfigValue("zk-data-dir");
+
+		// If no install-dir is specified, assume home directory
+		if (zkDataDir == null) {
+			zkDataDir = "/tmp/zktmp";
+		}
+
+		return zkDataDir;
+	}
+
+
+	/**
+	 * Get number of zookeeper snapshots to retain, if configured.
+	 */
+	public String getZkRetainSnapshots() {
+		return getRawConfigValue("zk-retain-snapshots");
+	}
+
+
+	/**
+	 * Get zookeeper snapshot purge interval, if configured.
+	 */
+	public String getZkPurgeInterval() {
+		return getRawConfigValue("zk-purge-interval");
 	}
 
 
