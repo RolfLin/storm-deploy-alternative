@@ -1,6 +1,8 @@
 package dk.kaspergsm.stormdeploy;
 
 import java.io.File;
+
+import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.compute.ComputeServiceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,19 +36,9 @@ public class StormDeployAlternative {
 		 * Parse
 		 */
 		String operation = args[0];
-		String clustername = args[1].toLowerCase();
-		Configuration config = Configuration.fromYamlFile(new File(Tools.getWorkDir() + "conf" + File.separator + "configuration.yaml"), clustername);
-		// Set install dir here so that we don’t have to keep passing around Configuration.
-		System.setProperty("install.dir", config.getInstallDir());
+		String clusterName = args[1].toLowerCase();
+		Configuration config = ConfigurationFactory.initialize(clusterName);
 		Credential credentials = new Credential(new File(Tools.getWorkDir() + "conf" + File.separator + "credential.yaml"));
-
-
-		/**
-		 * Check configuration
-		 */
-		if (!config.sanityCheck()) {
-			System.exit(0);
-		}
 
 
 		/**
@@ -80,14 +72,14 @@ public class StormDeployAlternative {
 		 */
 		if (operation.trim().equalsIgnoreCase("deploy")) {
 
-			Deploy.deploy(clustername, credentials, config, computeContext);
+			Deploy.deploy(clusterName, credentials, config, computeContext);
 
 		} else if (operation.trim().equalsIgnoreCase("scaleout")) {
 
 			try {
 				int newNodes = Integer.valueOf(args[2]);
 				String instanceType = args[3];
-				ScaleOutCluster.AddWorkers(newNodes, clustername, instanceType, config, credentials, computeContext);
+				ScaleOutCluster.AddWorkers(newNodes, clusterName, instanceType, config, credentials, computeContext);
 			} catch (Exception ex) {
 				log.error("Error parsing arguments", ex);
 				return;
@@ -95,11 +87,11 @@ public class StormDeployAlternative {
 
 		} else if (operation.trim().equalsIgnoreCase("attach")) {
 
-			Attach.attach(clustername, computeContext);
+			Attach.attach(clusterName, computeContext);
 
 		} else if (operation.trim().equalsIgnoreCase("kill")) {
 
-			Kill.kill(clustername, computeContext.getComputeService());
+			Kill.kill(clusterName, computeContext.getComputeService());
 
 		} else {
 			log.error("Unsupported operation " + operation);
