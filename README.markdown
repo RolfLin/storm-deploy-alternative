@@ -32,8 +32,8 @@ mycluster:
     - security-group "sg-152e1370"      # Optional.
     - remote-exec-preconfig {cd ~, echo hey > hey.txt}
     - remote-exec-postconfig {}
+    - install-dir "/mnt"
     - ssh-key-name "mySSHKeyName"       # Optional. Defaults to "id_rsa"
-    - install-dir "/mnt"                # Optional. Defaults to ~/
     - zk-retain-snapshots "3"           # Optional, but required if zk-purge-interval set
     - zk-purge-interval "6"             # Optional, but required if zk-retain-snapshots set
 ```
