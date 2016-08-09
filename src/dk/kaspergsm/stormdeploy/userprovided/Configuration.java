@@ -215,10 +215,10 @@ public class Configuration {
 	 */
 	public String getInstallDir() {
 		String installDir = getRawConfigValue("install-dir");
-
+		
 		// If no install-dir is specified, assume home directory
 		if (installDir == null) {
-			installDir = "~/";
+			installDir = Tools.getHomeDir();
 		}
 
 		if (!installDir.endsWith(File.separator)) {
