@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.NodeMetadata;
@@ -94,7 +92,7 @@ public class ScaleOutCluster {
 		/**
 		 * Update attachment
 		 */
-		Attach.attach(clustername, computeContext);
+		Attach.attach(clustername, config.getStormVersion(), computeContext);
 		
 		
 		/**

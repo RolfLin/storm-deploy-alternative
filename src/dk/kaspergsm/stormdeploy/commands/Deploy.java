@@ -71,7 +71,8 @@ public class Deploy {
 					getNewInstancesPublicIp(config, "WORKER", newNodes), 
 					Tools.getInstanceIp(getNimbusNode(config, newNodes)),
 					(getUINode(config, newNodes) == null) ? "" : Tools.getInstanceIp(getUINode(config, newNodes)), 
-					clustername);
+					clustername,
+					config.getStormVersion());
 		} catch (IOException ex) {
 			log.error("Problem attaching to cluster", ex);
 		}

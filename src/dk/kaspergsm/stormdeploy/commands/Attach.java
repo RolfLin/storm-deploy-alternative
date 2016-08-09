@@ -18,7 +18,7 @@ public class Attach {
 	 * Attaches to cluster
 	 */
 	@SuppressWarnings("unchecked")
-	public static void attach(String clustername, ComputeServiceContext computeContext) {	
+	public static void attach(String clustername, String stormVersion, ComputeServiceContext computeContext) {	
 		
 		/**
 		 * Parse current running nodes for cluster
@@ -57,7 +57,8 @@ public class Attach {
 					Tools.getInstancesIp(workerNodes), 
 					Tools.getInstanceIp(nimbus),
 					(ui == null) ? "" : Tools.getInstanceIp(ui),
-					clustername);
+					clustername,
+					stormVersion);
 			log.info("Attached to cluster");
 		} catch (IOException ex) {
 			log.error("Problem attaching to cluster", ex);

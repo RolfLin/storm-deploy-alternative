@@ -7,8 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import dk.kaspergsm.stormdeploy.userprovided.Configuration;
 import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.scriptbuilder.domain.Statement;
 
@@ -127,7 +125,7 @@ public class Storm {
 	 * Used to write config files to $HOME/.storm/
 	 * these are needed for the storm script to know where to submit topologies etc.
 	 */
-	public static void writeStormAttachConfigFiles(List<String> zookeeperNodesHostname, List<String> supervisorNodesHostname, String nimbusHost, String uiHost, String clustername) throws IOException {
+	public static void writeStormAttachConfigFiles(List<String> zookeeperNodesHostname, List<String> supervisorNodesHostname, String nimbusHost, String uiHost, String clustername, String stormVersion) throws IOException {
 		String userHome = Tools.getHomeDir();
 		new File(userHome + ".storm").mkdirs();
 		
@@ -139,9 +137,17 @@ public class Storm {
 			stormYaml.append(zookeeperNode);
 			stormYaml.append("\"\n");
 		}
-		stormYaml.append("nimbus.host: \"");
-		stormYaml.append(nimbusHost);
-		stormYaml.append("\"\n");
+		
+		// Add nimbus.host
+		if (stormVersion != null && stormVersion.startsWith("1")) {
+			stormYaml.append("nimbus.seeds: [\"");
+			stormYaml.append(nimbusHost);
+			stormYaml.append("\"]\n");
+		} else {
+			stormYaml.append("nimbus.host: \"");
+			stormYaml.append(nimbusHost);
+			stormYaml.append("\"\n");
+		}
 		stormYaml.append("ui.host: \"");
 		stormYaml.append(uiHost);
 		stormYaml.append("\"\n");

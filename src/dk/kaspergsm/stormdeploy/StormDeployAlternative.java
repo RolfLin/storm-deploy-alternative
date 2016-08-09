@@ -87,7 +87,7 @@ public class StormDeployAlternative {
 
 		} else if (operation.trim().equalsIgnoreCase("attach")) {
 
-			Attach.attach(clusterName, computeContext);
+			Attach.attach(clusterName, config.getStormVersion(), computeContext);
 
 		} else if (operation.trim().equalsIgnoreCase("kill")) {
 
