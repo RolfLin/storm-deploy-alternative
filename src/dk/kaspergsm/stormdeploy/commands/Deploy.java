@@ -116,7 +116,7 @@ public class Deploy {
 			log.info("\t" + Tools.getInstanceIp(n) + "\t" + n.getUserMetadata().get("daemons").toString());
 		log.info("Storm UI: http://" + Tools.getInstanceIp(getUINode(config, newNodes)) + ":8080");
 		log.info("Ganglia UI: http://" + Tools.getInstanceIp(getUINode(config, newNodes)) + "/ganglia");
-		
+		log.info("Please allow a few minutes for the services to initialize...");
 		/**
 		 * Close application now
 		 */

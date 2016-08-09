@@ -160,6 +160,8 @@ public class Configuration {
 			return "https://s3-eu-west-1.amazonaws.com/zk-releases/zookeeper-3.4.5.tar.gz";
 		} else if (version.equals("3.4.6")) {
 			return "https://s3-eu-west-1.amazonaws.com/zk-releases/zookeeper-3.4.6.tar.gz";
+		} else if (version.equals("3.4.8")) {
+			return "https://s3-eu-west-1.amazonaws.com/zk-releases/zookeeper-3.4.8.tar.gz";
 		} else {
 			log.info("Zookeeper version not currently supported!");
 		}
@@ -218,7 +220,7 @@ public class Configuration {
 		
 		// If no install-dir is specified, assume home directory
 		if (installDir == null) {
-			installDir = Tools.getHomeDir();
+			installDir = "/home/" + getImageUsername() + "/";
 		}
 
 		if (!installDir.endsWith(File.separator)) {
@@ -226,7 +228,6 @@ public class Configuration {
 		}
 		return installDir;
 	}
-
 
 	/**
 	 * Get zookeeper data directory

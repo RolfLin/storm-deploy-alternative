@@ -12,7 +12,7 @@ This tool is built as an alternative to storm-deploy, with significant more func
 + Automatically sets up s3cmd, making it easy to get/put files on [Amazon S3](http://aws.amazon.com/s3/)
 + Automatically sets up [Ganglia](http://ganglia.sourceforge.net/), making it easy to monitor performance
 + Automatically sets up [Amazon EC2 AMI Tools](http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ami-tools.html) on new nodes
-+ Supports Zookeeper versions: _3.4.5_ & _3.4.6_
++ Supports Zookeeper versions: _3.4.5_ & _3.4.6_ & _3.4.8_
 + Supports Storm versions: _0.8.2_ & _0.9.0.1_ & _0.9.2_ & _0.9.3_ & _0.9.4_ & _0.9.5_ & _0.10.0_ & _1.0.1_
 
 ## Configuration
