@@ -41,8 +41,8 @@ public class NodeConfiguration {
 		}
 		
 		// Conditional - Download and configure ZeroMQ (including jzmq binding)
-		commands.addAll(ZeroMQ.download());
-		commands.addAll(ZeroMQ.configure());
+//		commands.addAll(ZeroMQ.download());
+//		commands.addAll(ZeroMQ.configure());
 		
 		// Download and configure storm-deploy-alternative (before anything with supervision is started)
 		commands.addAll(StormDeployAlternative.download(config.getImageUsername(), config.getInstallDir()));
@@ -57,6 +57,9 @@ public class NodeConfiguration {
 		
 		// Download Ganglia
 		commands.addAll(Ganglia.install());
+
+		// Download Hdfs
+		commands.addAll(Hdfs.download());
 		
 		// Execute custom code, if user provided (pre config)
 		if (config.getRemoteExecPreConfig().size() > 0)
@@ -70,6 +73,9 @@ public class NodeConfiguration {
 		
 		// Configure Ganglia
 		commands.addAll(Ganglia.configure(clustername, uiHostname));
+
+		// Configure Hdfs (update configurationfiles)
+		commands.addAll(Hdfs.configure(nimbusHostname, config.getInstallDir()));
 				
 		// Execute custom code, if user provided (post config)
 		if (config.getRemoteExecPostConfig().size() > 0)

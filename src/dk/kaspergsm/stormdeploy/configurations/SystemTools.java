@@ -5,6 +5,7 @@ import static org.jclouds.scriptbuilder.domain.Statements.exec;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.kaspergsm.stormdeploy.userprovided.ConfigurationFactory;
 import org.jclouds.scriptbuilder.domain.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +35,26 @@ public class SystemTools {
 			
 			// Init apt
 			st.add(exec("apt-get update -y"));
-			//st.add(exec("apt-get upgrade -y")); - user can add to remote-exec-preconfig if needed
+//			st.add(exec("apt-get upgrade -y")); - user can add to remote-exec-preconfig if needed
 			
 			// Install JDK (OpenJDK 7)
-			st.add(exec("apt-get install -y openjdk-7-jdk"));
-			st.add(exec("export JAVA_HOME=$(dirname $(dirname $(find `ls -d /usr/lib/jvm/* | sort -k1 -r` -name 'javac' | head -1)))"));
-			st.add(exec("update-alternatives --set java $JAVA_HOME/jre/bin/java"));
-			
+//			st.add(exec("apt-get install -y openjdk-7-jdk"));
+//			st.add(exec("apt-get install -y python-software-properties"));
+//			st.add(exec("add-apt-repository -y ppa:webupd8team/java"));
+//			st.add(exec("apt-get update -y"));
+//			st.add(exec("apt-get install -y oracle-java8-set-default"));
+			st.add(exec("cd " + ConfigurationFactory.getConfig().getInstallDir()));
+			st.add(exec("wget --no-check-certificate --no-cookies --header \"Cookie: oraclelicense=accept-securebackup-cookie\" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz"));
+			st.add(exec("mkdir /usr/lib/jvm"));
+			st.add(exec("tar -zxf jdk-8u112-linux-x64.tar.gz -C /usr/lib/jvm"));
+//			st.add(exec("export JAVA_HOME=$(dirname $(dirname $(find `ls -d /usr/lib/jvm/* | sort -k1 -r` -name 'javac' | head -1)))"));
+//			st.add(exec("export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_112"));
+//			st.add(exec("update-alternatives --set java $JAVA_HOME/bin/java"));
+			st.add(exec("update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.8.0_112/bin/java 2000"));
+			st.add(exec("update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk1.8.0_112/bin/javac 2000"));
+
 			// Install ant
-			st.add(exec("apt-get install -y ant"));
+//			st.add(exec("apt-get install -y ant"));
 			
 			// Install git
 			st.add(exec("apt-get install -y git"));
