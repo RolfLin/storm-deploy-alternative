@@ -17,7 +17,7 @@ public class NodeConfiguration {
 	private NodeConfiguration() {
 	}
 
-	public static List<Statement> getCommands(String clustername, Credential credentials, Configuration config, List<String> zookeeperHostnames, List<String> drpcHostnames, String nimbusHostname, String uiHostname) {
+	public static List<Statement> getCommands(String clustername, Credential credentials, Configuration config, List<String> zookeeperHostnames, List<String> drpcHostnames, String nimbusHostname, String uiHostname, String nimbusPrivateIp) {
 		List<Statement> commands = new ArrayList<Statement>();
 		
 		// Install system tools
@@ -75,7 +75,7 @@ public class NodeConfiguration {
 		commands.addAll(Ganglia.configure(clustername, uiHostname));
 
 		// Configure Hdfs (update configurationfiles)
-		commands.addAll(Hdfs.configure(nimbusHostname, config.getInstallDir()));
+		commands.addAll(Hdfs.configure(nimbusPrivateIp, config.getInstallDir()));
 				
 		// Execute custom code, if user provided (post config)
 		if (config.getRemoteExecPostConfig().size() > 0)

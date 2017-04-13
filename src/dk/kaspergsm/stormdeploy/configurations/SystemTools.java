@@ -52,6 +52,7 @@ public class SystemTools {
 //			st.add(exec("update-alternatives --set java $JAVA_HOME/bin/java"));
 			st.add(exec("update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.8.0_112/bin/java 2000"));
 			st.add(exec("update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk1.8.0_112/bin/javac 2000"));
+			st.add(exec("echo \"export PATH=\\\"" + "/usr/lib/jvm/jdk1.8.0_112/bin:\\$PATH\\\"\" >> ~/.bashrc"));
 
 			// Install ant
 //			st.add(exec("apt-get install -y ant"));

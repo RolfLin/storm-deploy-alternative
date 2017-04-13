@@ -30,11 +30,15 @@ public class Hdfs {
         st.add(exec("touch hadoop-env.sh"));
         st.add(exec("sed -i 's/${JAVA_HOME}/\\/usr\\/lib\\/jvm\\/jdk1.8.0_112/g' hadoop-env.sh"));
 
+
+        st.add(exec("mkdir -p /home/root/hdfs/namenode"));
+        st.add(exec("mkdir /home/root/datanode"));
+
         // echo core-site.xml
         st.add(exec("touch core-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' core-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>hadoop.tmp.dir\\<\\/name\\>' core-site.xml"));
-        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>\\/home\\/ubuntu\\/tmp\\<\\/value\\>' core-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>\\/home\\/root\\/tmp\\<\\/value\\>' core-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' core-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' core-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>fs.default.name\\<\\/name\\>' core-site.xml"));
@@ -50,10 +54,15 @@ public class Hdfs {
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>dfs.namenode.name.dir\\<\\/name\\>' hdfs-site.xml"));
-        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>file:\\/home\\/ubuntu\\/hdfs\\/namenode\\<\\/value\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>file:\\/home\\/root\\/hdfs\\/namenode\\<\\/value\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>dfs.datanode.data.dir\\<\\/name\\>' hdfs-site.xml"));
-        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>file:\\/home\\/ubuntu\\/datanode\\<\\/value\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>file:\\/home\\/root\\/datanode\\<\\/value\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>dfs.permissions\\<\\/name\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>false<\\/value\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' hdfs-site.xml"));
 
 
@@ -68,12 +77,27 @@ public class Hdfs {
 
         // Add hdfs to execution PATH
         st.add(exec("echo \"export PATH=\\\"" + installDir + "hadoop-2.6.1/bin:\\$PATH\\\"\" >> ~/.bashrc"));
+        st.add(exec("echo \"export PATH=\\\"" + installDir + "hadoop-2.6.1/sbin:\\$PATH\\\"\" >> ~/.bashrc"));
 
         st.add(exec("sudo sed -i 's/#   StrictHostKeyChecking ask/StrictHostKeyChecking no/g' /etc/ssh/ssh_config"));
 
-        //run hdfs
-        st.add(exec("./ " + installDir + "hadoop-2.6.1/sbin/start-dfs.sh"));
+        //configure ssh
+        st.add(exec("ssh-keygen -t rsa -N \"\" -f /root/.ssh/id_rsa"));
+        st.add(exec("cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys"));
 
+        //format namenode
+        st.add(exec("cd " + installDir + "hadoop-2.6.1/bin"));
+        st.add(exec("./hadoop namenode -format"));
+
+
+        //run hdfs
+        st.add(exec("cd " + installDir + "hadoop-2.6.1/sbin"));
+        st.add(exec("./start-dfs.sh"));
+
+
+        //make working directory in hdfs
+        st.add(exec("cd " + installDir + "hadoop-2.6.1/bin"));
+        st.add(exec("./hdfs dfs -mkdir -p /home/lzj"));
         return st;
     }
 

@@ -268,6 +268,15 @@ public class Tools {
 			return null;
 		}
 	}
+
+	public static String getInstancePrivateIp(NodeMetadata node) {
+		if (node.getPrivateAddresses().size() > 0) {
+			return node.getPrivateAddresses().iterator().next();
+		} else {
+			log.warn("No ip was found");
+			return null;
+		}
+	}
 	
 	public static List<String> getInstancesIp(List<NodeMetadata> nodes) {
 		List<String> newNodes = new ArrayList<String>();
