@@ -66,7 +66,8 @@ public class ScaleOutCluster {
 					region = n.getLocation().getParent().getId();
 			}
 		}
-		
+
+		String nimbusIp = nimbus.getPrivateAddresses().iterator().next();
 		
 		/**
 		 * Start new workernodes
@@ -79,9 +80,10 @@ public class ScaleOutCluster {
 						config, 
 						getInstancesPrivateIp(existingZookeeper), 
 						getInstancesPrivateIp(existingDRPC),
-						nimbus == null ? null : nimbus.getPrivateAddresses().iterator().next(), 
+//						nimbus == null ? null : nimbus.getPrivateAddresses().iterator().next(),
+						nimbus == null ? null : nimbusIp,
 						ui == null ? null : ui.getPrivateAddresses().iterator().next(),
-						null),
+						nimbusIp),
 					instanceType, 
 					numInstances, 
 					image, 

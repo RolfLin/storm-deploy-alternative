@@ -59,6 +59,8 @@ public class SystemTools {
 			
 			// Install git
 			st.add(exec("apt-get install -y git"));
+
+			st.add(exec("apt-get install -y nload"));
 			
 			// Install build-tools
 			st.add(exec("apt-get install -y build-essential"));

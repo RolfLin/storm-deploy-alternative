@@ -53,12 +53,16 @@ public class Hdfs {
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>1<\\/value\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>dfs.namenode.safemode.threshold-pct\\<\\/name\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>0<\\/value\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>dfs.namenode.name.dir\\<\\/name\\>' hdfs-site.xml"));
-        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>file:\\/home\\/root\\/hdfs\\/namenode\\<\\/value\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>file:\\/mnt\\/hdfs\\/namenode\\<\\/value\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>dfs.datanode.data.dir\\<\\/name\\>' hdfs-site.xml"));
-        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>file:\\/home\\/root\\/datanode\\<\\/value\\>' hdfs-site.xml"));
+        st.add(exec("sed -i '/<\\/configuration\\>/i \\<value\\>file:\\/mnt\\/datanode\\<\\/value\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<\\/property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<property\\>' hdfs-site.xml"));
         st.add(exec("sed -i '/<\\/configuration\\>/i \\<name\\>dfs.permissions\\<\\/name\\>' hdfs-site.xml"));
